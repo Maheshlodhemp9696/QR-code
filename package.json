@@ -1,4 +1,14 @@
 {
+  "name": "qr-code-app",
+  "version": "1.0.0",
+  "description": "QR Code Generator with Node.js & MySQL",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
   "dependencies": {
     "body-parser": "^2.2.2",
     "cors": "^2.8.6",
