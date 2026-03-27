@@ -1,27 +1,22 @@
+require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const mysql = require("mysql2");
 const QRCode = require("qrcode");
 const { v4: uuidv4 } = require("uuid");
 const cors = require("cors");
-
+var db = require("./db.js");
 const app = express();
 app.use(bodyParser.json());
 app.use(express.static("public"));
 app.use(cors());
 
 // 👉 IMPORTANT: change this after deploy
-const BASE_URL = "http://192.168.1.5:3000"; 
+const BASE_URL = "https://qr-code-3b7m.onrender.com"; 
 
 const PORT = 3000;
 
 // MySQL connection
-const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "root", // your mysql password
-  database: "Ready_material"
-});
 
 db.connect(err => {
   if (err) {
@@ -49,11 +44,11 @@ app.post("/submit", async (req, res) => {
     const id = uuidv4();
 
     const sql = `
-      INSERT INTO user (name, email, mobile, address)
-      VALUES (?, ?, ?, ?)
+      INSERT INTO user (id,name, email, mobile, address)
+      VALUES (?, ?, ?, ?,?)
     `;
 
-    db.query(sql, [name, email, mobile, address], async (err) => {
+    db.query(sql, [id,name, email, mobile, address], async (err) => {
       if (err) {
         console.log(err);
         return res.status(500).send("Database Error");
@@ -81,13 +76,19 @@ app.post("/submit", async (req, res) => {
 // 🔥 View Data (QR Scan Page)
 app.get("/view/:id", (req, res) => {
   const id = req.params.id;
+    db.query("SELECT * FROM user WHERE id = ?", [id], (err, result) => {
 
-  db.query("SELECT * FROM user WHERE id = ?", [id], (err, result) => {
-    if (err) return res.send("Error");
+  if (err) {
+    console.log("❌ DB ERROR:", err);   // 👉 terminal मध्ये full error दिसेल
+    return res.send("<h2>Database Error</h2>");
+  }
 
-    if (result.length === 0) {
-      return res.send("<h2>No Data Found</h2>");
-    }
+  console.log("Result:", result); // 👉 data check
+
+  if (!result || result.length === 0) {
+    return res.send("<h2>No Data Found</h2>");
+  }
+
 
     const user = result[0];
 
@@ -128,7 +129,6 @@ app.get("/view/:id", (req, res) => {
     `);
   });
 });
-
 
 // 🔥 Server Start
 app.listen(PORT, () => {
