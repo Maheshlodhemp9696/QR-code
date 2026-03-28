@@ -92,40 +92,106 @@ app.get("/view/:id", (req, res) => {
 
     const user = result[0];
 
-    res.send(`
-      <html>
-      <head>
-        <title>User Details</title>
-        <style>
-          body {
-            font-family: Arial;
-            background: #f4f4f4;
-            text-align: center;
-            padding: 50px;
-          }
-          .card {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            display: inline-block;
-            box-shadow: 0 0 10px rgba(0,0,0,0.2);
-          }
-          h2 { color: #333; }
-          p { font-size: 18px; }
-        </style>
-      </head>
-      <body>
+     res.send(`
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Profile</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
 
-        <div class="card">
-          <h2>User Details</h2>
-          <p><b>Name:</b> ${user.name}</p>
-          <p><b>Email:</b> ${user.email}</p>
-          <p><b>Mobile:</b> ${user.mobile}</p>
-          <p><b>Address:</b> ${user.address}</p>
-        </div>
+    body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+    }
 
-      </body>
-      </html>
+    .card {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(15px);
+      border-radius: 20px;
+      padding: 30px 40px;
+      width: 350px;
+      color: white;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      text-align: left;
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+    }
+
+    .title {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .title h2 {
+      font-size: 28px;
+      letter-spacing: 1px;
+    }
+
+    .info {
+      margin: 15px 0;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+    }
+
+    .info i {
+      margin-right: 10px;
+      color: #ffd369;
+    }
+
+    .footer {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 14px;
+      opacity: 0.8;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="card">
+    <div class="title">
+      <h2><i class="fa-solid fa-user"></i> User Profile</h2>
+    </div>
+
+    <div class="info">
+      <i class="fa-solid fa-user"></i>
+      <span><b>Name:</b> ${user.name}</span>
+    </div>
+
+    <div class="info">
+      <i class="fa-solid fa-envelope"></i>
+      <span><b>Email:</b> ${user.email}</span>
+    </div>
+
+    <div class="info">
+      <i class="fa-solid fa-location-dot"></i>
+      <span><b>Address:</b> ${user.address}</span>
+    </div>
+
+    <div class="footer">
+      © 2026 Your Company
+    </div>
+  </div>
+
+</body>
+</html>
     `);
   });
 });
